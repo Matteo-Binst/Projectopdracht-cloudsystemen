@@ -1,0 +1,30 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches: [ "main", "master" ] 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Haal de code op uit GitHub
+      uses: actions/checkout@v4
+
+    - name: Kopieer alle bestanden naar de server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "."
+        target: "~/website"
+
+    - name: Start Docker op de server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd ~/website
+          sudo docker compose up --build -d
