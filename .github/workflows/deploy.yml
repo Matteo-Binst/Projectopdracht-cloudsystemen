@@ -27,6 +27,6 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /home/binstmatteo1/website
+          cd /home/binstmatteo1/website/website-cloudsystemen
           sudo docker compose down
           sudo docker compose up --build -d
